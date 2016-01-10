@@ -38,7 +38,8 @@ YES
 
 import sys
 
-def extract_array_from_data(data_line):
+
+def extract_array_from_data(data, data_line):
 
     array_position = data_line + 1
     array_with_spaces = data.split("\n")[array_position]
@@ -46,7 +47,7 @@ def extract_array_from_data(data_line):
     return list(map((lambda x: int(x)), array_of_strings))
 
 
-def sherlock_and_array(data):
+def sherlock_and_array_brute_force(data):
 
     number_of_tests = int(data.split("\n")[0])
     data_line = 1
@@ -72,6 +73,39 @@ def sherlock_and_array(data):
 
         data_line += 2
 
-data = "2\n3\n1 2 3\n4\n1 2 3 3"
-# data = sys.stdin.read()
-sherlock_and_array(data)
+
+def sherlock_and_array_elegant(data):
+
+    number_of_tests = int(data.split("\n")[0])
+    data_line = 1
+
+    for i in range(0, number_of_tests):
+        array_length = int(data.split("\n")[data_line])
+        array = extract_array_from_data(data, data_line)
+        left_sum = array[0]
+        right_sum = sum(array[2:])
+
+        if array_length > 2:
+            for i in range(1, array_length-1):
+                if left_sum == right_sum:
+                    print("YES")
+                    quit()
+                left_sum += array[i]
+                right_sum -= array[i+1]
+
+            print("NO")
+        else:
+            if array_length == 1:
+                print("YES")
+            elif array_length == 2:
+                if array[1] == 0:
+                    print("YES")
+                else:
+                    print("NO")
+
+        data_line += 2
+
+# input_data = "2\n3\n1 2 3\n4\n1 2 3 3"
+input_data = "1\n5\n1 2 4 3 7"
+# input_data = sys.stdin.read()
+sherlock_and_array_elegant(input_data)
